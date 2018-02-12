@@ -1,30 +1,36 @@
-var turn = false;
 
 var Board = function () {
-	this.row0 = [null, null, null];
-	this.row1 = [null, null, null];
-	this.row2 = [null, null, null];
+	this.board = {
+		r0: [null, null, null],
+		r1: [null, null, null],
+		r2: [null, null, null],
+	}
+	this.turn = false;
 }
+
+var currentGame = new Board();
 
 //functions to check for winners 
 Board.prototype.winByRow = function () {
-	for (var key in this) {
+	var curGame = this.board
+	for (var key in curGame) {
 		//if all values of array are equal and not null
-		if (key[0] !== null && key[0] === key[1] && key[0] === key[2]){
+		if (curGame[key][0] !== null && curGame[key][0] === curGame[key][1] && curGame[key][0] === curGame[key][2]){
 			//return that value
-			return key[0];
+			return curGame[key][0];
 		}
 	}
 	return null;
 }
 
 Board.prototype.winByColumn = function () {
+	var curGame = this.board;
 	//loop through column indices
 	for (var i = 0; i < 3; i++) {
 		//if value in each row at column are the same and they don't equal null
-		if (this.row0[i] !== null && this.row0[i] === this.row1[i] && this.row0[i] === this.row2[i]) {
+		if (curGame.r0[i] !== null && curGame.r0[i] === curGame.r1[i] && curGame.r0[i] === curGame.r2[i]) {
 			//return that value
-			return this.row0[i];
+			return curGame.r0[i];
 		}
 	}
 	// return null;
@@ -32,15 +38,16 @@ Board.prototype.winByColumn = function () {
 }
 
 Board.prototype.winByDiagonal = function () {
+	var curGame = this.board;
 	//check if values of 0-0, 1-1, and 2-2 are equal & not null
-	if (this.row0[0] !== null && this.row0[0] === this.row1[1] && this.row0[0] === this.row2[2]) {
+	if (curGame.r0[0] !== null && curGame.r0[0] === curGame.r1[1] && curGame.r0[0] === curGame.r2[2]) {
 		//if both true return that value
-		return this.row0[0];
+		return curGame.r0[0];
 
 	//else check if 0-2, 1-1, 2-0 are all equal & not null
-	} else if (this.row0[2] !== null && this.row0[2] === this.row1[1] && this.row0[2] === this.row2[0]) {
+	} else if (curGame.r0[2] !== null && curGame.r0[2] === curGame.r1[1] && curGame.r0[2] === curGame.r2[0]) {
 		//if yes return that value
-		return this.row0[2];
+		return curGame.r0[2];
 		
 	}
 	//return null
@@ -61,9 +68,9 @@ Board.prototype.checkForWin = function () {
 }
 
 Board.prototype.checkForStalemate = function () {
-	for (var key in this) {
+	for (var key in this.board) {
 		for (var i = 0; i < 3; i++) {
-			if (this[key][i] === null) {
+			if (this.board[key][i] === null) {
 				return false;
 			}
 		}
@@ -82,27 +89,69 @@ Board.prototype.checkForGameOver = function () {
 	return null;
 }
 
-	
 
 
 //model
-//write a function to handle board clicks, takes a div argument
+
+//write a function to handle board clicks, takes a div id argument
+Board.prototype.place = function (divId) {
+	var curRow = divId.slice(0, 2);
+	var curCol = divId.slice(4);
+	var curGame = this.board;
+
 	//is the boardplace of that div null?
 	//if yes
+	if (!curGame[curRow][curCol]) {
 		// check whose turn it is
-			//if turn is false
-				//value of boardplace is now X
-			// if turn is true
-				//value of boardplace is now O
-		//check for winners
-		//check for stalemates
+		//if turn is false
+		if (!this.turn) {
+			//value of boardplace is now X
+			curGame[curRow][curCol] = 'X';
+			//trigger render div with divID & X
+			updateBoard(divId, 'X');
+
+		// if turn is true
+		} else {
+			//value of boardplace is now O
+			curGame[curRow][curCol] = 'O';
+			//trigger render div with divID & O
+			updateBoard(divID, 'O');
+		}
+		//switch turn
+		this.turn = !this.turn;
+	}
+
+	//check for winners
+	if (this.checkForGameOver()) {
+		handleGameOver( this.checkForGameOver() );
+	}
+	
+}
+
+	
 
 
 //view
-//write a function that correlates each boardplace to a div
-	
-// if value of board changes
+
+//function that takes a div id and changes the value of the div
+var updateBoard = function (divId, value) {
 	//update actual div to value at the boardPlace
+	document.getElementById('divId').value(value);
+}
+
+//function to render when game is over
+var handleGameOver = function (winner) {
+	if (winner === 'X') {
+		//change div to show that x won
+		//display div
+	} else if (winner === 'O') {
+		//change div to show that o won
+		//display div
+	} else {
+		//change div to stalemate
+		//display div
+	}
+}
 
 
 //controller
