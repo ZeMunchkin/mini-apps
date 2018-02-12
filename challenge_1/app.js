@@ -6,6 +6,7 @@ var Board = function () {
 		r2: [null, null, null],
 	}
 	this.turn = false;
+	this.gameOver = null;
 }
 
 var currentGame = new Board();
@@ -107,23 +108,16 @@ Board.prototype.place = function (divId) {
 		if (!this.turn) {
 			//value of boardplace is now X
 			curGame[curRow][curCol] = 'X';
-			this.turn = !this.turn;
-			return 'X';
 
 		// if turn is true
 		} else {
 			//value of boardplace is now O
 			curGame[curRow][curCol] = 'O';
-			this.turn = !this.turn;
-			return 'O';
 		}
-	}
-
-	//check for winners
-	if (this.checkForGameOver()) {
-		handleGameOver( this.checkForGameOver() );
+		this.turn = !this.turn;
 	}
 	
+	return curGame[curRow][curCol];
 }
 
 	
@@ -149,15 +143,26 @@ var handleGameOver = function (winner) {
 
 
 //controller
-var handleClick = function (event) {
-
+var handleBoardClick = function (event) {
 	console.log('click!');
-	var divId = event.target.id;
-	var divValue = currentGame.place(divId);
-	event.target.innerText = divValue;
+	var gameStatus = currentGame.gameOver;
+	console.log(gameStatus);
+	if (!gameStatus) {
+		var divId = event.target.id;
+		var divValue = currentGame.place(divId);
+		event.target.innerText = divValue;
+
+		currentGame.gameOver = currentGame.checkForGameOver();
+
+		if (gameStatus) {
+			handleGameOver(gameStatus);
+		}
+ 	}
 }
 
-
+var handleNewGame = function () {
+	
+}
 
 
 //DOM

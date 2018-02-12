@@ -7,23 +7,23 @@
   <body>
   	<div id="app">
   		<div id="gameOver">Player ? is the winner!</div>
-  		<button id="newGame">New Game</button>
+  		<button id="newGame" onClick="handleNewGame(event)">New Game</button>
   		<br>
 	  	<table id="board">
 	  		<tr id="row0">
-	  			<td class="boardPlace" id="r0c0" onClick="handleClick(event)"></td>
-	  			<td class="boardPlace" id="r0c1" onClick="handleClick(event)"></td>
-	  			<td class="boardPlace" id="r02c" onClick="handleClick(event)"></td>
+	  			<td class="boardPlace" id="r0c0" onClick="handleBoardClick(event)"></td>
+	  			<td class="boardPlace" id="r0c1" onClick="handleBoardClick(event)"></td>
+	  			<td class="boardPlace" id="r02c" onClick="handleBoardClick(event)"></td>
 	  		</tr>
 	  		<tr id="row1">
-	  			<td class="boardPlace" id="r1c0" onClick="handleClick(event)"></td>
-	  			<td class="boardPlace" id="r1c1" onClick="handleClick(event)"></td>
-	  			<td class="boardPlace" id="r1c2" onClick="handleClick(event)"></td>
+	  			<td class="boardPlace" id="r1c0" onClick="handleBoardClick(event)"></td>
+	  			<td class="boardPlace" id="r1c1" onClick="handleBoardClick(event)"></td>
+	  			<td class="boardPlace" id="r1c2" onClick="handleBoardClick(event)"></td>
 	  		</tr>
 	  		<tr id="row2">
-	  			<td class="boardPlace" id="r2c0" onClick="handleClick(event)"></td>
-	  			<td class="boardPlace" id="r2c1" onClick="handleClick(event)"></td>
-	  			<td class="boardPlace" id="r2c2" onClick="handleClick(event)"></td>
+	  			<td class="boardPlace" id="r2c0" onClick="handleBoardClick(event)"></td>
+	  			<td class="boardPlace" id="r2c1" onClick="handleBoardClick(event)"></td>
+	  			<td class="boardPlace" id="r2c2" onClick="handleBoardClick(event)"></td>
 	  		</tr>
 	   	</table>
 	 </div>
