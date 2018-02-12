@@ -1,0 +1,10 @@
+.boardPlace {
+	height: 20px;
+	width: 20px;
+	border: solid;
+	border-width: 2px;
+}
+
+#gameOver {
+	display: none;
+}
