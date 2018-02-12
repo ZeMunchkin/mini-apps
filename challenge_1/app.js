@@ -96,7 +96,7 @@ Board.prototype.checkForGameOver = function () {
 //write a function to handle board clicks, takes a div id argument
 Board.prototype.place = function (divId) {
 	var curRow = divId.slice(0, 2);
-	var curCol = divId.slice(4);
+	var curCol = divId.slice(3);
 	var curGame = this.board;
 
 	//is the boardplace of that div null?
@@ -107,18 +107,16 @@ Board.prototype.place = function (divId) {
 		if (!this.turn) {
 			//value of boardplace is now X
 			curGame[curRow][curCol] = 'X';
-			//trigger render div with divID & X
-			updateBoard(divId, 'X');
+			this.turn = !this.turn;
+			return 'X';
 
 		// if turn is true
 		} else {
 			//value of boardplace is now O
 			curGame[curRow][curCol] = 'O';
-			//trigger render div with divID & O
-			updateBoard(divID, 'O');
+			this.turn = !this.turn;
+			return 'O';
 		}
-		//switch turn
-		this.turn = !this.turn;
 	}
 
 	//check for winners
@@ -134,10 +132,6 @@ Board.prototype.place = function (divId) {
 //view
 
 //function that takes a div id and changes the value of the div
-var updateBoard = function (divId, value) {
-	//update actual div to value at the boardPlace
-	document.getElementById('divId').value(value);
-}
 
 //function to render when game is over
 var handleGameOver = function (winner) {
@@ -155,6 +149,14 @@ var handleGameOver = function (winner) {
 
 
 //controller
+var handleClick = function (event) {
+
+	console.log('click!');
+	var divId = event.target.id;
+	var divValue = currentGame.place(divId);
+	event.target.innerText = divValue;
+}
+
 
 
 
