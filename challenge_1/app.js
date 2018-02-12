@@ -129,14 +129,19 @@ Board.prototype.place = function (divId) {
 
 //function to render when game is over
 var handleGameOver = function (winner) {
+	console.log('invoked');
+	console.log(document.getElementById('gameOver'));
 	if (winner === 'X') {
 		//change div to show that x won
+		document.getElementById('gameOver').innerText = 'Player X has won!';
 		//display div
 	} else if (winner === 'O') {
 		//change div to show that o won
+		document.getElementById('gameOver').innerText = 'Player O has won!';
 		//display div
 	} else {
 		//change div to stalemate
+		document.getElementById('gameOver').innerText = 'Stalemate!';
 		//display div
 	}
 }
@@ -145,23 +150,33 @@ var handleGameOver = function (winner) {
 //controller
 var handleBoardClick = function (event) {
 	console.log('click!');
-	var gameStatus = currentGame.gameOver;
-	console.log(gameStatus);
-	if (!gameStatus) {
+	if (!currentGame.gameOver) {
 		var divId = event.target.id;
 		var divValue = currentGame.place(divId);
 		event.target.innerText = divValue;
 
 		currentGame.gameOver = currentGame.checkForGameOver();
 
-		if (gameStatus) {
-			handleGameOver(gameStatus);
+		if (currentGame.gameOver) {
+			handleGameOver(currentGame.gameOver);
 		}
  	}
 }
 
 var handleNewGame = function () {
-	
+	currentGame = new Board();
+	var curBoard = currentGame.board;
+	for (var key in curBoard) {
+		for (i = 0; i < 3; i++) {
+			console.log('key:', key);
+			console.log('i:', i);
+			var divId = `${key}c${i}`;
+			console.log(divId);
+			document.getElementById(divId).innerText = '';
+		}
+	}
+	document.getElementById('gameOver').innerText = '';
+
 }
 
 
