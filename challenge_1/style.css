@@ -1,9 +1,25 @@
 .boardPlace {
-	height: 40px;
-	width: 40px;
+	height: 70px;
+	width: 70px;
 	border: solid;
 	border-width: 2px;
-	font-size: 20px;
+	font-size: 35px;
 	text-align: center;
+	font-weight: 500;
 }
 
+#gameOver {
+	padding: 3px;
+	margin-left: 35px;
+	font-weight: 900;
+	font-size: 20px;
+}
+
+h2 {
+	margin-left: 50px;
+}
+
+#newGame {
+	margin: 5px;
+	margin-left: 85px;
+}
