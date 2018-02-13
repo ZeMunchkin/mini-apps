@@ -17,6 +17,8 @@ var handleClick = function (event) {
     }),
     success: function (data) {
       console.log('Success!', data);
+      $('#formSubmitted').append('<br>');
+      $('#formSubmitted').append(data);
     },
     error: function (data) {
       console.log('Error!', data);

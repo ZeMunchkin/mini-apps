@@ -17,29 +17,48 @@ var helpers = {
   },
 
   createTableArray: function (obj) {
-    var tableString = 'firstName,lastName,county,city,role,sales';
-    var employeeTableData = [tableString];
-    
-    var traverse = function (objNode) {
-      var employeeWorkingArray = [];
+    var objKeys = [];
 
-      employeeWorkingArray.push(objNode.firstName, 
-        objNode.lastName, 
-        objNode.county,
-        objNode.city,
-        objNode.role,
-        objNode.sales
-      );
-
-      employeeTableData.push(employeeWorkingArray.join(','));
-
-      objNode.children.forEach ( child => {
-        traverse(child);
-      });
+    //iterate through object keys and add them all except children to keys array
+    for (var key in obj) {
+      if (key !== 'children') {
+        objKeys.push(key);
+      }
     }
 
+    var keysString = '<div>' + objKeys.join(',') + '</div>';
+    var employeeTableData = [keysString];
+
+    //create recursion function, takes an obj as arg
+    var traverse = function (currentObject) {
+      //variable for employee key values array
+      var employeeKeyValues = [];
+      //iterate through object keys
+      objKeys.forEach( key => {
+        //add each of those values at the key to the array
+        if (currentObject[key] !== undefined) {
+          employeeKeyValues.push(currentObject[key]);
+        } else {
+          employeeKeyValues.push('N/A');
+        }
+      })
+
+      //create a string by joining the array and wrapping in a div
+      var employeeDataString = '<div>' + employeeKeyValues.join(',') + '</div>';
+      //push string into employee table data
+      employeeTableData.push(employeeDataString);
+
+      //if the object has children, call traverse on all children
+      currentObject.children.forEach( child => {
+        traverse(child);
+      });
+
+    }
+
+    //call traverse on object
     traverse(obj);
 
+    //return all the table data
     return employeeTableData;
   }
 };

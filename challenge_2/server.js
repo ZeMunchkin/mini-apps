@@ -34,12 +34,17 @@ app.get('/app.js', function (req, res) {
 app.post('/', function (req, res) {
   console.log('post!');
 
+  //parse the request into a working object
   var resultObject = helpers.parseResults(req.body.csv);
-
+  //create an array with all the table data needed from each employee
   var employeeTable = helpers.createTableArray(resultObject);
 
-  console.log(employeeTable);
- 
+  employeeTable = employeeTable.join('');
+  
+  //send response with results
+  res.set('content-type', 'text/plain');
+  res.status(201);
+  res.send(employeeTable);
 
 });
 
