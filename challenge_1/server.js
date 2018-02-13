@@ -8,6 +8,7 @@ app.get('/', function (req, res) {
 		if (err) {
 			res.sendStatus(404);
 		}
+		res.set('content-type', 'text/html');
 		res.send(results.toString());
 	});
 });
@@ -18,7 +19,7 @@ app.get('/style.css', function (req, res) {
 		if (err) {
 			res.sendStatus(404);
 		}
-		res.writeHead(200, {'Content-Type': 'text/css'});
+		res.set('content-type', 'text/css');
 		res.end(results.toString());
 	});
 });
@@ -29,7 +30,7 @@ app.get('/app.js', function (req, res) {
 		if (err) {
 			res.sendStatus(404);
 		}
-		res.writeHead(200, {'Content-Type': 'application/json'});
+		res.set('content-type', 'application/json');
 		res.end(results.toString());
 	});
 })
