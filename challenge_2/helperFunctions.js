@@ -26,7 +26,7 @@ var helpers = {
       }
     }
 
-    var keysString = '<div>' + objKeys.join(',') + '</div>';
+    var keysString = '<div class="tableKeys">' + objKeys.join(' || ') + '</div>';
     var employeeTableData = [keysString];
 
     //create recursion function, takes an obj as arg
@@ -44,7 +44,7 @@ var helpers = {
       })
 
       //create a string by joining the array and wrapping in a div
-      var employeeDataString = '<div>' + employeeKeyValues.join(',') + '</div>';
+      var employeeDataString = '<div>' + employeeKeyValues.join(' || ') + '</div>';
       //push string into employee table data
       employeeTableData.push(employeeDataString);
 

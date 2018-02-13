@@ -3,8 +3,6 @@ var parse = require('body-parser');
 var helpers = require('./helperFunctions.js');
 var fs = require('fs');
 
-var allData = [];
-
 var app = express();
 
 app.use(parse.json());
@@ -31,6 +29,17 @@ app.get('/app.js', function (req, res) {
   });
 });
 
+app.get('/style.css', function (req, res) {
+  console.log('style get!');
+  fs.readFile('./client/style.css', function (err, result) {
+    if (err) {
+      res.sendStatus(404);
+    }
+    res.set('content-type', 'text/css');
+    res.send(result);
+  });
+})
+
 app.post('/', function (req, res) {
   console.log('post!');
 
@@ -38,7 +47,7 @@ app.post('/', function (req, res) {
   var resultObject = helpers.parseResults(req.body.csv);
   //create an array with all the table data needed from each employee
   var employeeTable = helpers.createTableArray(resultObject);
-
+  //combine into a string before sending
   employeeTable = employeeTable.join('');
   
   //send response with results

@@ -4,7 +4,7 @@ var handleClick = function (event) {
   console.log('I was clicked!');
 
   var formVal = document.getElementById('csvSubmission').value;
-  console.log(formVal);
+  document.getElementById('csvSubmission').value = '';
 
   $.ajax({
     url: '/',
@@ -24,9 +24,5 @@ var handleClick = function (event) {
       console.log('Error!', data);
     },
   });
-
-}
-
-var successRender = function (data) {
 
 }
