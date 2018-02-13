@@ -13,7 +13,7 @@ var handleClick = function (event) {
       "content-type": 'application/json',
     },
     data: JSON.stringify({
-      "csvSubmission": formVal,
+      "csv": formVal,
     }),
     success: function (data) {
       console.log('Success!', data);
@@ -25,3 +25,6 @@ var handleClick = function (event) {
 
 }
 
+var successRender = function (data) {
+
+}

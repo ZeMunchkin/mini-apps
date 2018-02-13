@@ -2,6 +2,8 @@ var express = require('express');
 var parse = require('body-parser');
 var fs = require('fs');
 
+var allData = [];
+
 var app = express();
 
 app.use(parse.json());
@@ -30,7 +32,33 @@ app.get('/app.js', function (req, res) {
 
 app.post('/', function (req, res) {
   console.log('post!');
-  console.log('req body:', req.body);
+
+  console.log(req.body);
+
+
+  // var reqFields = req.body.csv.split('\n');
+  // console.log(reqFields);
+
+  // var data = [];
+
+  // reqFields.forEach( person => {
+  //   personArray = person.split(',');
+  //   personObject = {
+  //     firstName: personArray[0],
+  //     lastName: personArray[1],
+  //     county: personArray[2],
+  //     city: personArray[3],
+  //     role: personArray[4],
+  //     sales: personArray[5],
+  //     children: [],
+  //   };
+  //   data.push(personObject)
+  // });
+
+  // console.log(data);
+
+  // res.set('content-type', 'application/json');
+  // res.send(JSON.stringify(inputObject));
 
 });
 
