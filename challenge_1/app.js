@@ -9,12 +9,19 @@ var Board = function () {
 }
 
 var currentGame = new Board();
+var prevWinner = null;
+var xTally = 0;
+var oTally = 0;
 
 //functions to check for winners 
 Board.prototype.winByRow = function () {
 	var curGame = this.board
 	for (var key in curGame) {
 		if (curGame[key][0] !== null && curGame[key][0] === curGame[key][1] && curGame[key][0] === curGame[key][2]){
+			var divId = `${key}c`
+			document.getElementById(divId + 0).style['background-color'] = 'red';
+			document.getElementById(divId + 1).style['background-color'] = 'red';
+			document.getElementById(divId + 2).style['background-color'] = 'red';
 			return curGame[key][0];
 		}
 	}
@@ -25,6 +32,10 @@ Board.prototype.winByColumn = function () {
 	var curGame = this.board;
 	for (var i = 0; i < 3; i++) {
 		if (curGame.r0[i] !== null && curGame.r0[i] === curGame.r1[i] && curGame.r0[i] === curGame.r2[i]) {
+			var divId = `c${i}`
+			document.getElementById('r0' + divId).style['background-color'] = 'red';
+			document.getElementById('r1' + divId).style['background-color'] = 'red';
+			document.getElementById('r2' + divId).style['background-color'] = 'red';
 			return curGame.r0[i];
 		}
 	}
@@ -34,9 +45,15 @@ Board.prototype.winByColumn = function () {
 Board.prototype.winByDiagonal = function () {
 	var curGame = this.board;
 	if (curGame.r0[0] !== null && curGame.r0[0] === curGame.r1[1] && curGame.r0[0] === curGame.r2[2]) {
+		document.getElementById('r0c0').style['background-color'] = 'red';
+		document.getElementById('r1c1').style['background-color'] = 'red';
+		document.getElementById('r2c2').style['background-color'] = 'red';
 		return curGame.r0[0];
 
 	} else if (curGame.r0[2] !== null && curGame.r0[2] === curGame.r1[1] && curGame.r0[2] === curGame.r2[0]) {
+		document.getElementById('r2c0').style['background-color'] = 'red';
+		document.getElementById('r1c1').style['background-color'] = 'red';
+		document.getElementById('r0c2').style['background-color'] = 'red';
 		return curGame.r0[2];
 	}
 	return null;
@@ -101,23 +118,7 @@ Board.prototype.place = function (divId) {
 	
 
 //Controllers and Views
-var handleGameOver = function (winner) {
-	console.log('invoked');
-	console.log(document.getElementById('gameOver'));
-	if (winner === 'X') {
-		document.getElementById('gameOver').innerText = 'Player X has won!';
-
-	} else if (winner === 'O') {
-		document.getElementById('gameOver').innerText = 'Player O has won!';
-
-	} else {
-		document.getElementById('gameOver').innerText = 'Stalemate!';
-	}
-}
-
-
 var handleBoardClick = function (event) {
-	console.log('click!');
 	if (!currentGame.gameOver) {
 		var divId = event.target.id;
 		var divValue = currentGame.place(divId);
@@ -131,19 +132,41 @@ var handleBoardClick = function (event) {
  	}
 }
 
+var handleGameOver = function (winner) {
+	console.log(document.getElementById('gameOver'));
+	if (winner === 'X') {
+		var playerX = document.getElementById('xName').value || 'X';
+		document.getElementById('gameOver').innerText = `${playerX} has won!`;
+		xTally++;
+		document.getElementById('xWins').innerText = xTally;
+		prevWinner = 'X';
+
+	} else if (winner === 'O') {
+		var playerO = document.getElementById('oName').value || 'O';
+		document.getElementById('gameOver').innerText = `${playerO} has won!`;
+		oTally++;
+		document.getElementById('oWins').innerText = oTally;
+		prevWinner = 'O';
+
+	} else {
+		document.getElementById('gameOver').innerText = 'Oh-No! Stalemate!';
+	}
+}
+
 var handleNewGame = function () {
 	currentGame = new Board();
 	var curBoard = currentGame.board;
+	if (prevWinner === 'O'){
+		currentGame.turn = true;
+	}
+
 	for (var key in curBoard) {
 		for (i = 0; i < 3; i++) {
-			console.log('key:', key);
-			console.log('i:', i);
 			var divId = `${key}c${i}`;
-			console.log(divId);
 			document.getElementById(divId).innerText = '';
+			document.getElementById(divId).style['background-color'] = 'white';
 		}
 	}
 	document.getElementById('gameOver').innerText = '';
-
 }
 

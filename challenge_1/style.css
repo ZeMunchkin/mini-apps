@@ -10,7 +10,7 @@
 
 #gameOver {
 	padding: 3px;
-	margin-left: 35px;
+	margin-left: 60px;
 	font-weight: 900;
 	font-size: 20px;
 }
@@ -22,4 +22,18 @@ h2 {
 #newGame {
 	margin: 5px;
 	margin-left: 85px;
+}
+
+#tally {
+	margin-left: 30px;
+}
+
+.tallyDiv {
+	font-weight: 700;
+	font-size: 20px;
+}
+
+span {
+	font-weight: 700;
+	font-size: 18px
 }
