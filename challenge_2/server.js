@@ -1,5 +1,6 @@
 var express = require('express');
 var parse = require('body-parser');
+var helpers = require('./helperFunctions.js');
 var fs = require('fs');
 
 var allData = [];
@@ -33,32 +34,12 @@ app.get('/app.js', function (req, res) {
 app.post('/', function (req, res) {
   console.log('post!');
 
-  console.log(req.body);
+  var resultObject = helpers.parseResults(req.body.csv);
 
+  var employeeTable = helpers.createTableArray(resultObject);
 
-  // var reqFields = req.body.csv.split('\n');
-  // console.log(reqFields);
-
-  // var data = [];
-
-  // reqFields.forEach( person => {
-  //   personArray = person.split(',');
-  //   personObject = {
-  //     firstName: personArray[0],
-  //     lastName: personArray[1],
-  //     county: personArray[2],
-  //     city: personArray[3],
-  //     role: personArray[4],
-  //     sales: personArray[5],
-  //     children: [],
-  //   };
-  //   data.push(personObject)
-  // });
-
-  // console.log(data);
-
-  // res.set('content-type', 'application/json');
-  // res.send(JSON.stringify(inputObject));
+  console.log(employeeTable);
+ 
 
 });
 
