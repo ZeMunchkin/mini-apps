@@ -18,10 +18,9 @@ Board.prototype.winByRow = function () {
 	var curGame = this.board
 	for (var key in curGame) {
 		if (curGame[key][0] !== null && curGame[key][0] === curGame[key][1] && curGame[key][0] === curGame[key][2]){
-			var divId = `${key}c`
-			document.getElementById(divId + 0).style['background-color'] = 'red';
-			document.getElementById(divId + 1).style['background-color'] = 'red';
-			document.getElementById(divId + 2).style['background-color'] = 'red';
+			document.getElementById(`${key}c0`).style['background-color'] = 'red';
+			document.getElementById(`${key}c1`).style['background-color'] = 'red';
+			document.getElementById(`${key}c2`).style['background-color'] = 'red';
 			return curGame[key][0];
 		}
 	}
@@ -32,10 +31,9 @@ Board.prototype.winByColumn = function () {
 	var curGame = this.board;
 	for (var i = 0; i < 3; i++) {
 		if (curGame.r0[i] !== null && curGame.r0[i] === curGame.r1[i] && curGame.r0[i] === curGame.r2[i]) {
-			var divId = `c${i}`
-			document.getElementById('r0' + divId).style['background-color'] = 'red';
-			document.getElementById('r1' + divId).style['background-color'] = 'red';
-			document.getElementById('r2' + divId).style['background-color'] = 'red';
+			document.getElementById(`r0c${i}`).style['background-color'] = 'red';
+			document.getElementById(`r1c${i}`).style['background-color'] = 'red';
+			document.getElementById(`r2c${i}`).style['background-color'] = 'red';
 			return curGame.r0[i];
 		}
 	}
@@ -95,7 +93,6 @@ Board.prototype.checkForGameOver = function () {
 }
 
 
-
 // function to handle model changes
 Board.prototype.place = function (divId) {
 	var curRow = divId.slice(0, 2);
@@ -149,7 +146,7 @@ var handleGameOver = function (winner) {
 		prevWinner = 'O';
 
 	} else {
-		document.getElementById('gameOver').innerText = 'Oh-No! Stalemate!';
+		document.getElementById('gameOver').innerText = 'A Stalemate!';
 	}
 }
 
