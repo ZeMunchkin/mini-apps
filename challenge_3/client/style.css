@@ -1,0 +1,22 @@
+td {
+  border: solid;
+  height: 50px;
+  width: 50px;
+}
+
+table {
+  border: solid;
+}
+
+#announcements {
+  font-size: 40px;
+  font-weight: 700;
+}
+
+/*#app {
+  text-align: center
+}
+
+table {
+  float: center;
+}*/

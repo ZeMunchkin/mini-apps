@@ -1,6 +1,6 @@
 import React from 'react';
 import {render} from 'react-dom';
-import Board from 'Board';
+import Board from './Board.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -30,9 +30,13 @@ class App extends React.Component {
   render () {
     return (
       <div>
-        <div>{this.state.turn === false ? 'Player One' : 'Player Two'}'s Turn</div>
-        <br>
+        <div id="announcements">
+          {this.state.turn === false ? 'Player One' : 'Player Two'}'s Turn
+        </div>
+        <br />
+        <br />
         <Board
+          id="board"
           turnsFunc={this.updateTurns}
           resetTurns={this.resetTurns}
           turn={this.state.turn}
@@ -44,3 +48,5 @@ class App extends React.Component {
 }
 
 render(<App />, document.getElementById('app'));
+
+

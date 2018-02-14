@@ -12,7 +12,7 @@ app.get('/', function (req, res) {
       res.sendStatus(404);
     }
     res.set('content-type', 'test/html');
-    res.send(results);
+    res.send(JSON.stringify(results));
   });
 });
 
@@ -22,7 +22,7 @@ app.get('/app.jsx', function (req, res) {
       res.sendStatus(404);
     }
     res.set('content-type', 'application/json');
-    res.send(results);
+    res.send(JSON.stringify(results));
   });
 });
 
@@ -32,7 +32,7 @@ app.get('/style.css', function (req, res) {
       res.sendStatus(404);
     }
     res.set('content-type', 'test/css');
-    res.send(results);
+    res.send(JSON.stringify(results));
   });
 });
 
