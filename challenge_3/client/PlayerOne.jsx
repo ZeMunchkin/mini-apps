@@ -2,8 +2,7 @@ import React from 'react';
 
 var PlayerOne = () => {
   return (
-    <div class="P1">
-      P1
+    <div className="P1">
     </div>
   );
 }

@@ -13,10 +13,17 @@ table {
   font-weight: 700;
 }
 
-/*#app {
-  text-align: center
+.P1 {
+  background-color: red;
 }
 
-table {
-  float: center;
-}*/
+.P2 {
+  background-color: blue;
+}
+
+.P1, .P2 {
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  margin: 5px;
+}

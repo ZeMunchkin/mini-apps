@@ -19,6 +19,8 @@ class Board extends React.Component {
         'r0': ['', '', '', '', '', '', ''],
       }
     }
+
+    this.placePiece = this.placePiece.bind(this);
   }
 
   placePiece (event) {
@@ -41,12 +43,12 @@ class Board extends React.Component {
         //if player one
         if (!this.props.turn) {
           //set state of the row/col to instantiation of P1
-          board[currentRow][columnIndex] = 'PlayerOne';
+          board[currentRow][columnIndex] = PlayerOne();
           this.setState({'board': board});
         //else 
         } else {
           //set state of the row/col to instance of P2
-          board[currentRow][columnIndex] = 'PlayerTwo';
+          board[currentRow][columnIndex] = PlayerTwo();
           this.setState({'board': board});
         }
         //invoke function to update turns on App
@@ -235,63 +237,40 @@ class Board extends React.Component {
   }
 
   render () {
+
     return (
       <div>
         <table> 
           <tbody>        
             <tr id='row5'>
-              <td className='0' onClick={this.placePiece}>{this.state.board['r5'][0]}</td>
-              <td className='col1'>{this.state.board['r5'][1]}</td>
-              <td className='col2'>{this.state.board['r5'][2]}</td>
-              <td className='col3'>{this.state.board['r5'][3]}</td>
-              <td className='col4'>{this.state.board['r5'][4]}</td>
-              <td className='col5'>{this.state.board['r5'][5]}</td>
-              <td className='col6'>{this.state.board['r5'][6]}</td>
+              {this.state.board['r5'].map( (col, i) => {
+                return (<td className={i} onClick={this.placePiece}>{col}</td>)
+              })}
             </tr>
             <tr id='row4'>
-              <td className='0'>{this.state.board['r4'][0]}</td>
-              <td className='col1'>{this.state.board['r4'][1]}</td>
-              <td className='col2'>{this.state.board['r4'][2]}</td>
-              <td className='col3'>{this.state.board['r4'][3]}</td>
-              <td className='col4'>{this.state.board['r4'][4]}</td>
-              <td className='col5'>{this.state.board['r4'][5]}</td>
-              <td className='col6'>{this.state.board['r4'][6]}</td>
+              {this.state.board['r4'].map( (col, i) => {
+                return (<td className={i} onClick={this.placePiece}>{col}</td>)
+              })}
             </tr>
             <tr id='row3'>
-              <td className='0'>{this.state.board['r3'][0]}</td>
-              <td className='col1'>{this.state.board['r3'][1]}</td>
-              <td className='col2'>{this.state.board['r3'][2]}</td>
-              <td className='col3'>{this.state.board['r3'][3]}</td>
-              <td className='col4'>{this.state.board['r3'][4]}</td>
-              <td className='col5'>{this.state.board['r3'][5]}</td>
-              <td className='col6'>{this.state.board['r3'][6]}</td>
+              {this.state.board['r3'].map( (col, i) => {
+                return (<td className={i} onClick={this.placePiece}>{col}</td>)
+              })}
             </tr>
             <tr id='row2'>
-              <td className='0'>{this.state.board['r2'][0]}</td>
-              <td className='col1'>{this.state.board['r2'][1]}</td>
-              <td className='col2'>{this.state.board['r2'][2]}</td>
-              <td className='col3'>{this.state.board['r2'][3]}</td>
-              <td className='col4'>{this.state.board['r2'][4]}</td>
-              <td className='col5'>{this.state.board['r2'][5]}</td>
-              <td className='col6'>{this.state.board['r2'][6]}</td>
+              {this.state.board['r2'].map( (col, i) => {
+                return (<td className={i} onClick={this.placePiece}>{col}</td>)
+              })}
             </tr>
             <tr id='row1'>
-              <td className='0'>{this.state.board['r1'][0]}</td>
-              <td className='col1'>{this.state.board['r1'][1]}</td>
-              <td className='col2'>{this.state.board['r1'][2]}</td>
-              <td className='col3'>{this.state.board['r1'][3]}</td>
-              <td className='col4'>{this.state.board['r1'][4]}</td>
-              <td className='col5'>{this.state.board['r1'][5]}</td>
-              <td className='col6'>{this.state.board['r1'][6]}</td>
+              {this.state.board['r1'].map( (col, i) => {
+                return (<td className={i} onClick={this.placePiece}>{col}</td>)
+              })}
             </tr>
             <tr id='row0'>
-              <td className='0'>{this.state.board['r0'][0]}</td>
-              <td className='col1'>{this.state.board['r0'][1]}</td>
-              <td className='col2'>{this.state.board['r0'][2]}</td>
-              <td className='col3'>{this.state.board['r0'][3]}</td>
-              <td className='col4'>{this.state.board['r0'][4]}</td>
-              <td className='col5'>{this.state.board['r0'][5]}</td>
-              <td className='col6'>{this.state.board['r0'][6]}</td>
+              {this.state.board['r0'].map( (col, i) => {
+                return (<td className={i} onClick={this.placePiece}>{col}</td>)
+              })}
             </tr>
           </tbody>
         </table>
