@@ -1,5 +1,16 @@
 var helpers = {
 
+  parseFilters: function (filtersString) {
+    var returnArray;
+    //check if filtered items have commas before splitting
+    if (filtersString.includes(',')) {
+      returnArray = filtersString.split(', ');
+    } else {
+      returnArray = filtersString.split(' ');
+    }
+    return returnArray;
+  },
+
   parseResults: function (resultString) {
     //split the results string on the '\n' & then rejointo get rid of the newline
     var afterSplit = resultString.split('\n');
@@ -17,10 +28,12 @@ var helpers = {
   },
 
   createTableArray: function (obj, filters) {
+    //variable to hold all fields in given object
     var objKeys = [];
 
-    //iterate through object keys and add them all except children to keys array
+    //iterate through object keys and add them all to keys array
     for (var key in obj) {
+      //exclude children and any filtered keys
       if (key !== 'children' && !filters.includes(key)) {
         objKeys.push(key);
       }
@@ -28,6 +41,7 @@ var helpers = {
 
     var keysString = '<div class="tableKeys">' + objKeys.join(' || ') + '</div>';
     var employeeTableData = [keysString];
+    //add a unique line number 
     var lineCounter = 1;
 
     //create recursion function, takes an obj as arg
@@ -44,10 +58,11 @@ var helpers = {
         }
       })
 
-      //create a string by joining the array and wrapping in a div
+      //turn into string by joining the array and wrapping in a div
       var employeeDataString = `<div>${lineCounter}. ${employeeKeyValues.join(' || ')}</div>`;
       //push string into employee table data
       employeeTableData.push(employeeDataString);
+      //increment line the unique line number
       lineCounter++;
 
       //if the object has children, call traverse on all children

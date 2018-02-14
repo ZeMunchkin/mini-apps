@@ -3,10 +3,12 @@ var parse = require('body-parser');
 var helpers = require('./helperFunctions.js');
 var fs = require('fs');
 
+
 var app = express();
 
 app.use(parse.json());
 
+//get functions to handle initial requests to load page
 app.get('/', function (req, res) {
   console.log('index get!');
   fs.readFile('./client/index.html', function (err, result) {
@@ -40,11 +42,13 @@ app.get('/style.css', function (req, res) {
   });
 });
 
+
+//post function
 app.post('/', function (req, res) {
   console.log('post!');
-  var filters = req.body.filter.split(', ');
-  console.log(filters);
-
+  
+  //parse the filters into an array
+  var filters = helpers.parseFilters(req.body.filter);
   //parse the request into a working object
   var resultObject = helpers.parseResults(req.body.csv);
   //create an array with all the table data needed from each employee
@@ -58,6 +62,7 @@ app.post('/', function (req, res) {
   res.send(employeeTable);
 
 });
+
 
 app.listen(3000);
 

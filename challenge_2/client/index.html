@@ -7,21 +7,28 @@
     <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
+    <h2>Create a CSV!</h2>
     <div>
       <form action="/" method="post">
         <div>
-          <label type="text" for="csvSubmission">Create CSV!</label>
+          <label type="text" for="csvSubmission">
+            Paste Sales Report
+          </label>
           <br>
           <textarea id="csvSubmission"></textarea>
           <br>
-          <label type="text" for="filter">Exclude</label>
+          <label type="text" for="filter">
+            Exclude Category(ies)
+          </label>
           <br>
           <input id="filter">
         </div>
-        <button type="button" onClick="handleClick(event)">Submit</button>
+        <button type="button" onClick="handleClick(event)">
+          Submit
+        </button>
       </form>
     </div>
-    <div id="formSubmitted">
+    <div id="csvRender">
     </div>
   </body>
 </html>
