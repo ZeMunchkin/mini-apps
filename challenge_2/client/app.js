@@ -6,6 +6,10 @@ var handleClick = function (event) {
   var formVal = document.getElementById('csvSubmission').value;
   document.getElementById('csvSubmission').value = '';
 
+  var filter = document.getElementById('filter').value;
+  document.getElementById('filter').value = '';
+
+
   $.ajax({
     url: '/',
     method: 'POST',
@@ -14,6 +18,7 @@ var handleClick = function (event) {
     },
     data: JSON.stringify({
       "csv": formVal,
+      "filter": filter,
     }),
     success: function (data) {
       console.log('Success!', data);

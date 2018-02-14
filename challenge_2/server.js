@@ -38,15 +38,16 @@ app.get('/style.css', function (req, res) {
     res.set('content-type', 'text/css');
     res.send(result);
   });
-})
+});
 
 app.post('/', function (req, res) {
   console.log('post!');
+  var filter = req.body.filter;
 
   //parse the request into a working object
   var resultObject = helpers.parseResults(req.body.csv);
   //create an array with all the table data needed from each employee
-  var employeeTable = helpers.createTableArray(resultObject);
+  var employeeTable = helpers.createTableArray(resultObject, filter);
   //combine into a string before sending
   employeeTable = employeeTable.join('');
   

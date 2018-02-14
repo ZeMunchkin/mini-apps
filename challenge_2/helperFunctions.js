@@ -16,18 +16,19 @@ var helpers = {
     return resultObject;
   },
 
-  createTableArray: function (obj) {
+  createTableArray: function (obj, filter) {
     var objKeys = [];
 
     //iterate through object keys and add them all except children to keys array
     for (var key in obj) {
-      if (key !== 'children') {
+      if (key !== 'children' && key !== filter) {
         objKeys.push(key);
       }
     }
 
     var keysString = '<div class="tableKeys">' + objKeys.join(' || ') + '</div>';
     var employeeTableData = [keysString];
+    var lineCounter = 1;
 
     //create recursion function, takes an obj as arg
     var traverse = function (currentObject) {
@@ -44,9 +45,10 @@ var helpers = {
       })
 
       //create a string by joining the array and wrapping in a div
-      var employeeDataString = '<div>' + employeeKeyValues.join(' || ') + '</div>';
+      var employeeDataString = `<div>${lineCounter}. ${employeeKeyValues.join(' || ')}</div>`;
       //push string into employee table data
       employeeTableData.push(employeeDataString);
+      lineCounter++;
 
       //if the object has children, call traverse on all children
       currentObject.children.forEach( child => {
