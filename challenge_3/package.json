@@ -1,0 +1,23 @@
+{
+  "name": "challenge_3",
+  "version": "1.0.0",
+  "description": "Connect Four",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Sara Brandes",
+  "license": "ISC",
+  "dependencies": {
+    "babel": "^6.23.0",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "fs": "0.0.1-security",
+    "jquery": "^3.3.1",
+    "jsx": "^0.9.89",
+    "nodemon": "^1.14.12",
+    "react": "^16.2.0",
+    "reactdom": "^2.0.0",
+  }
+}
