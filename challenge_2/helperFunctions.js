@@ -27,14 +27,14 @@ var helpers = {
     return resultObject;
   },
 
-  createTableArray: function (obj, filters) {
+  createTableArray: function (obj, filtersArray) {
     //variable to hold all fields in given object
     var objKeys = [];
 
     //iterate through object keys and add them all to keys array
     for (var key in obj) {
       //exclude children and any filtered keys
-      if (key !== 'children' && !filters.includes(key)) {
+      if (key !== 'children' && !filtersArray.includes(key)) {
         objKeys.push(key);
       }
     }
