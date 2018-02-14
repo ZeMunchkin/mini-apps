@@ -42,12 +42,13 @@ app.get('/style.css', function (req, res) {
 
 app.post('/', function (req, res) {
   console.log('post!');
-  var filter = req.body.filter;
+  var filters = req.body.filter.split(', ');
+  console.log(filters);
 
   //parse the request into a working object
   var resultObject = helpers.parseResults(req.body.csv);
   //create an array with all the table data needed from each employee
-  var employeeTable = helpers.createTableArray(resultObject, filter);
+  var employeeTable = helpers.createTableArray(resultObject, filters);
   //combine into a string before sending
   employeeTable = employeeTable.join('');
   

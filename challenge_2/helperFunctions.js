@@ -16,12 +16,12 @@ var helpers = {
     return resultObject;
   },
 
-  createTableArray: function (obj, filter) {
+  createTableArray: function (obj, filters) {
     var objKeys = [];
 
     //iterate through object keys and add them all except children to keys array
     for (var key in obj) {
-      if (key !== 'children' && key !== filter) {
+      if (key !== 'children' && !filters.includes(key)) {
         objKeys.push(key);
       }
     }
