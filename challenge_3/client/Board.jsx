@@ -9,6 +9,8 @@ class Board extends React.Component {
 
     this.state = {
       winner: null,
+      turn: false,
+      turnCount: 0,
       rows: ['r0', 'r1', 'r2', 'r3', 'r4', 'r5'],
       board: {
         'r5': ['', '', '', '', '', '', ''],
@@ -21,6 +23,10 @@ class Board extends React.Component {
     }
 
     this.placePiece = this.placePiece.bind(this);
+    this.winByRow = this.winByRow.bind(this);
+    this.winByCol = this.winByCol.bind(this);
+    this.winByMajorDiag = this.winByMajorDiag.bind(this);
+    this.winByMinorDiag = this.winByMinorDiag.bind(this);
   }
 
   placePiece (event) {
@@ -31,7 +37,7 @@ class Board extends React.Component {
       return;
     }
 
-    var turn = this.props.turn;
+    var turn = this.state.turn;
     var rows = this.state.rows;
     var board = this.state.board;
     //iterate through this.rows to find first row that's empty at col index
@@ -41,28 +47,33 @@ class Board extends React.Component {
       if (board[currentRow][columnIndex] === '') {
         //check whose turn it is
         //if player one
-        if (!this.props.turn) {
+        if (!this.state.turn) {
           //set state of the row/col to instantiation of P1
-          board[currentRow][columnIndex] = PlayerOne();
+          board[currentRow][columnIndex] = '1';
           this.setState({'board': board});
         //else 
         } else {
           //set state of the row/col to instance of P2
-          board[currentRow][columnIndex] = PlayerTwo();
+          board[currentRow][columnIndex] = '2';
           this.setState({'board': board});
         }
         //invoke function to update turns on App
-        this.props.turnsFunc();
+        this.setState({
+          'turn': !this.state.turn,
+          'turnCount': ++this.state.turnCount
+        });
 
         //check if winner
         var winner = this.checkForWins();
         if (winner) {
           //change div to announce winner
           //set state to declare winner
+          this.setState({'winner': winner})
         }
 
         //check for stalemate
-        if (this.props.turnCount === 42) {
+        if (this.state.turnCount === 42) {
+
           //change div to announce stalemate
           //set state of winenr to stalemate
         }
@@ -75,21 +86,25 @@ class Board extends React.Component {
 
   checkForWins () {
     var rowWinner = this.winByRow();
+    console.log('row', rowWinner);
     if (rowWinner) {
       return rowWinner;
     }
 
     var colWinner = this.winByCol();
+    console.log('col', colWinner);
     if (colWinner) {
       return colWinner;
     }
 
     var majorDWinner = this.winByMajorDiag();
+    console.log('major', majorDWinner);
     if(majorDWinner) {
       return majorDWinner;
     }
 
     var minorDWinner = this.winByMinorDiag();
+    console.log('minor', minorDWinner);
     if (minorDWinner) {
       return minorDWinner;
     }
@@ -107,37 +122,65 @@ class Board extends React.Component {
     for (var key in board) {
       //iterate through each row
       for (var i = 0; i < board[key]; i++) {
-        //if piece !== streakpiece && piece !== ''
-        if (board[key][i] !== streakpiece && board[key][i] !== '') {
-          //set streakpiece equal to current piece
-          streakpiece = board[key][i]
+        var piece = board[key][i];
+        //if piece !== streakPiece && piece !== ''
+        if (piece !== streakPiece && piece) {
+          //set streakPiece equal to current piece
+          streakPiece = piece;
           //set counter to 1
-          
-        }
+          counter = 1;
+
         // else if piece is the same as streak piece & piece !== ''
+        } else if (piece === streakPiece && piece) {
           //increase counter by 1
+          counter++;
           //if counter === 4
-            //return streakpiece
-        
+          if (counter === 4) {
+            //return streakPiece
+            return streakPiece;
+          }
+        }
       }
-      
     }
     //return null
+    return null;
   }
 
   winByCol () {
+    var colIndex = [0, 1, 2, 3, 4, 5, 6];
+    var rows = this.state.rows;
+    var board = this.state.board;
     //iterate through column indices (0-6)
+    for (var i = 0; i < colIndex.length; i++) {
       //variable to store streak piece
+      var streakPiece;
       //counter set to zero
-        //iterate through rows at column index
-          //if piece !== string && piece !== streak piece
-            // set streakpiece to current piece
-            //reset counter to 1
-          //else if piece !== '' and streakpiece and piece are the same
-            //increase counter 
-            //if counter === 4
-              //return streakpiece
+      var counter = 0;
+      var curCol = colIndex[i]
+      //iterate through rows at column index
+      for (var j = 0; j < rows.length; j++) {
+        var piece = board[rows[j]][curCol];
+        //if piece !== string && piece !== streak piece
+        if (piece && piece !== streakPiece) {
+          // set streakpiece to current piece
+          streakPiece = piece;
+          //reset counter to 1
+          counter = 1;
+
+        //else if piece !== '' and streakpiece and piece are the same
+        } else if (piece && piece === streakPiece) {
+          //increase counter 
+          counter++;
+          //if counter === 4
+          if (counter === 4) {
+            //return streakpiece
+            return streakPiece;
+          }
+        }
+      }
+    }
     //return null
+    return null;
   }
 
 

@@ -6,42 +6,22 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      turn: false,
-      turnCount: 0,
+      announcement: ''
     }
-  this.updateTurns = this.updateTurns.bind(this);
-  this.resetTurns = this.resetTurns.bind(this);
+    this.setAnnouncement = this.setAnnouncement.bind(this);
   }
 
-  updateTurns () {
-    this.setState({
-      'turn': !this.state.turn, 
-      'turnCount': this.state.turnCount++
-    });
-  }
-
-  resetTurns () {
-    this.setState({
-      'turn': false,
-      turnCount: 0
-    });
+  setAnnouncement (string) {
+    this.setState({'announcement': string});
   }
 
   render () {
     return (
       <div>
-        <div id="announcements">
-          {this.state.turn === false ? 'Player One' : 'Player Two'}'s Turn
-        </div>
+        <div id="announcements">{this.state.announcement}</div>
         <br />
         <br />
-        <Board
-          id="board"
-          turnsFunc={this.updateTurns}
-          resetTurns={this.resetTurns}
-          turn={this.state.turn}
-          turnCount={this.state.turnCount}
-        />
+        <Board id="board" setAnnouncement={this.setAnnouncement}/>
       </div>
     );
   }
