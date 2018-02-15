@@ -1,9 +1,24 @@
 td {
   border: solid;
   border-width: 2px;
-  width: 750px;
+  width: 90px;
+  height: 35px;
+  text-align: center
 }
 
 tr {
   border: solid;
+}
+
+.specials {
+  font-size: 30px;
+  font-weight: 900;
+  margin: 5px;
+}
+
+.frameScores {
+  font-size: 20px;
+  font-weight: 900;
+  color: blue;
+  border-color: black;
 }

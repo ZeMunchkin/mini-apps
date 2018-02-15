@@ -10,21 +10,23 @@ const Frames = (props) => {
       <table>
         <tbody>
           <tr>
-            {props.rounds.map( (scoreTuple, index) => {
-              return (
-                <th>Frame {index + 1}</th>
-              );
-            })}
+            {props.frames.map( (scoreTuple, index) => (
+              <th>Frame {index + 1}</th>
+            ))}
           </tr>
           <tr>
-            {props.rounds.map( (scoreTuple, index) => {
-              return (
+            {props.frames.map( (scoreTuple, index) => (
                 <Frame 
-                  id={index}
+                  key={'frame' + index}
                   scores={scoreTuple}
+                  frame={index + 1}
                 />
-              );
-            })}
+            ))}
+          </tr>
+          <tr>
+            {props.scores.map( frameScore => (
+              <td className="frameScores">{frameScore}</td>
+            ))}
           </tr>
         </tbody>
       </table>
