@@ -202,9 +202,11 @@ class Board extends React.Component {
       //counter set to zero
       var counter = 0;
       var curCol = i;
+
       //iterate through rows at column index
       for (var j = 0; j < 6; j++) {
-        var player = board[j][curCol];
+        var curRow = j;
+        var player = board[curRow][curCol];
         //if player !== string && player !== streak player
         if (player && player.key !== streakPlayer) {
           // set streakPlayer to current player
