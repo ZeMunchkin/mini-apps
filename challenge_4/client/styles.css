@@ -1,0 +1,9 @@
+td {
+  border: solid;
+  border-width: 2px;
+  width: 750px;
+}
+
+tr {
+  border: solid;
+}

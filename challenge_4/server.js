@@ -1,9 +1,10 @@
 const express = require('express');
-//const fs = require('fs');
 
 const app = express();
 
 app.use(express.static('client'));
+
+// app.get('/style.css')
 
 app.listen(3000, () => {
   console.log('Listening on port 3000!');

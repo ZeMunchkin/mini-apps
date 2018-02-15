@@ -1,5 +1,5 @@
 import React from 'react';
-import Frames from './Frame.jsx';
+import Frame from './Frame.jsx';
 
 
 const Frames = (props) => {
@@ -8,16 +8,25 @@ const Frames = (props) => {
   return (
     <div id="framesContainer">
       <table>
-        <tr>
-          {props.scores.map( (score, index) => {
-            return (
-              <Frame 
-                id={index}
-                scores={score}
-              />
-            );
-          })}
-        </tr>
+        <tbody>
+          <tr>
+            {props.rounds.map( (scoreTuple, index) => {
+              return (
+                <th>Frame {index + 1}</th>
+              );
+            })}
+          </tr>
+          <tr>
+            {props.rounds.map( (scoreTuple, index) => {
+              return (
+                <Frame 
+                  id={index}
+                  scores={scoreTuple}
+                />
+              );
+            })}
+          </tr>
+        </tbody>
       </table>
     </div>
   );

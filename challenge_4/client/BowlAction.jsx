@@ -1,10 +1,8 @@
 import React from 'react';
 
-const BowlAction = () => {
-
-  return (
-
-  );
-}
+const BowlAction = () => (
+  <div>
+  </div>
+);
 
 export default BowlAction;
