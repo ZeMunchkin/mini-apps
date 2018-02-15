@@ -12,20 +12,21 @@ app.get('/', function (req, res) {
     if (err) {
       res.sendStatus(404);
     } else {
-      res.set('content-type', 'text/html');
-      res.send(results);
+      res.set('Content-Type', 'text/html');
+      console.log(results.toString());
+      res.send(results.toString());
     }
   });
 });
 
 app.get('/bundle.js/', function (req, res) {
-  console.log('app get!');
+  console.log('bundle get!');
   fs.readFile('./client/bundle.js', function (err, results) {
     if (err) {
       res.sendStatus(404);
     } else {
-      res.set('content-type', 'application/json');
-      res.send(JSON.stringify(results));
+      res.set('content-type', 'application/javascript');
+      res.send(results.toString());
     }
   });
 });
@@ -36,8 +37,8 @@ app.get('/style.css', function (req, res) {
     if (err) {
       res.sendStatus(404);
     } else {
-      res.set('content-type', 'application/json');
-      res.send(JSON.stringify(results));
+      res.set('content-type', 'text/css');
+      res.send(results.toString());
     }
   });
 });

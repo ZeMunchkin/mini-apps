@@ -11,7 +11,7 @@ class Board extends React.Component {
       winner: null,
       turn: false,
       turnCount: 0,
-      rows: ['0', '1', '2', '3', '4', '5'],
+      rows: [0, 1, 2, 3, 4, 5],
       board: {
         '5': ['', '', '', '', '', '', ''],
         '4': ['', '', '', '', '', '', ''],
@@ -22,6 +22,7 @@ class Board extends React.Component {
       }
     }
 
+    //bind all functions with 'this' to this Board instance
     this.placePiece = this.placePiece.bind(this);
     this.resetBoard = this.resetBoard.bind(this);
     this.setAppAnnouncements = this.setAppAnnouncements.bind(this);
@@ -113,7 +114,6 @@ class Board extends React.Component {
     });
 
     this.setAppAnnouncements();
-
   }
 
   setAppAnnouncements () {
@@ -131,27 +131,24 @@ class Board extends React.Component {
     }
   }
   
+  //functions to check for wins
   checkForWins () {
     var rowWinner = this.winByRow();
-    console.log('row', rowWinner);
     if (rowWinner) {
       return rowWinner;
     }
 
     var colWinner = this.winByCol();
-    console.log('col', colWinner);
     if (colWinner) {
       return colWinner;
     }
 
     var majorDWinner = this.winByMajorDiag();
-    console.log('major', majorDWinner);
     if(majorDWinner) {
       return majorDWinner;
     }
 
     var minorDWinner = this.winByMinorDiag();
-    console.log('minor', minorDWinner);
     if (minorDWinner) {
       return minorDWinner;
     }
@@ -159,6 +156,7 @@ class Board extends React.Component {
     return null;
   }
 
+  //by row
   winByRow () {
     var board = this.state.board;
     //variable to store player with streak
@@ -194,6 +192,7 @@ class Board extends React.Component {
     return null;
   }
 
+  //by column
   winByCol () {
     var colIndex = [0, 1, 2, 3, 4, 5, 6];
     var rows = this.state.rows;
@@ -231,6 +230,7 @@ class Board extends React.Component {
     return null;
   }
 
+  //on a single major diagonal
   winOnMajorDiag (colIndexAtRw0) {
     //set streak player
     var streakPlayer;
@@ -276,6 +276,7 @@ class Board extends React.Component {
     return null;
   }
 
+  //on all major diagonals
   winByMajorDiag () {
     //create array of all row0 indicies it's possible to get a diagonal win on
     //note: this is not all diagonals on the board, since some have less than four spots
@@ -295,6 +296,7 @@ class Board extends React.Component {
     return null;
   }
 
+  //on a single minor diagonal
   winOnMinorDiag (colIndexAtRw0) {
   //function to see if win on diagonal, given a col index at row 0
     //set streakPlayer var
@@ -343,6 +345,7 @@ class Board extends React.Component {
     
   }
 
+  //on all minor diagonal
   winByMinorDiag () {
     //create array of all row0 indicies it's possible to get a diagonal win on
     //note: this is not all diagonals on the board, since some have less than four spots
