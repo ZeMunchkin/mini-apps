@@ -1,40 +1,53 @@
 var express = require('express');
 var parse = require('body-parser');
-var fs = rquire('fs');
+var fs = require('fs');
 
 var app = express();
 
 app.use(parse.json());
 
 app.get('/', function (req, res) {
-  fs.readFile('./index.html', function (err, results) {
+  console.log('init get!');
+  fs.readFile('./client/index.html', function (err, results) {
     if (err) {
       res.sendStatus(404);
+    } else {
+      res.set('content-type', 'text/html');
+      res.send(results);
     }
-    res.set('content-type', 'test/html');
-    res.send(JSON.stringify(results));
   });
 });
 
-app.get('/app.jsx', function (req, res) {
-  fs.readFile('./app.jsx', function (err, results) {
+app.get('/bundle.js/', function (req, res) {
+  console.log('app get!');
+  fs.readFile('./client/bundle.js', function (err, results) {
     if (err) {
       res.sendStatus(404);
+    } else {
+      res.set('content-type', 'application/json');
+      res.send(JSON.stringify(results));
     }
-    res.set('content-type', 'application/json');
-    res.send(JSON.stringify(results));
   });
 });
 
 app.get('/style.css', function (req, res) {
-  fs.readFile('./style.css', function (err, results) {
+  console.log('css get!');
+  fs.readFile('./client/style.css', function (err, results) {
     if (err) {
       res.sendStatus(404);
+    } else {
+      res.set('content-type', 'application/json');
+      res.send(JSON.stringify(results));
     }
-    res.set('content-type', 'test/css');
-    res.send(JSON.stringify(results));
   });
 });
 
-app.listen(3000);
+app.get('/*', function (req, res) {
+  console.log('other get!');
+  console.log(req.url);
+});
+
+app.listen(3000, function () {
+  console.log('listening on port 3000!')
+});
 

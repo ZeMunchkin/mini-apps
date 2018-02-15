@@ -2,7 +2,7 @@ import React from 'react';
 
 var PlayerTwo = () => {
   return (
-    <div className="P2">
+    <div key="Player2" className="P2">
     </div>
   );
 }

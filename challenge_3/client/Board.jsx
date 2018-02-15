@@ -11,23 +11,28 @@ class Board extends React.Component {
       winner: null,
       turn: false,
       turnCount: 0,
-      rows: ['r0', 'r1', 'r2', 'r3', 'r4', 'r5'],
+      rows: ['0', '1', '2', '3', '4', '5'],
       board: {
-        'r5': ['', '', '', '', '', '', ''],
-        'r4': ['', '', '', '', '', '', ''],
-        'r3': ['', '', '', '', '', '', ''],
-        'r2': ['', '', '', '', '', '', ''],
-        'r1': ['', '', '', '', '', '', ''],
-        'r0': ['', '', '', '', '', '', ''],
+        '5': ['', '', '', '', '', '', ''],
+        '4': ['', '', '', '', '', '', ''],
+        '3': ['', '', '', '', '', '', ''],
+        '2': ['', '', '', '', '', '', ''],
+        '1': ['', '', '', '', '', '', ''],
+        '0': ['', '', '', '', '', '', ''],
       }
     }
 
     this.placePiece = this.placePiece.bind(this);
+    this.resetBoard = this.resetBoard.bind(this);
+    this.setAppAnnouncements = this.setAppAnnouncements.bind(this);
     this.winByRow = this.winByRow.bind(this);
     this.winByCol = this.winByCol.bind(this);
+    this.winOnMajorDiag = this.winOnMajorDiag.bind(this);
     this.winByMajorDiag = this.winByMajorDiag.bind(this);
+    this.winOnMinorDiag = this.winOnMinorDiag.bind(this);
     this.winByMinorDiag = this.winByMinorDiag.bind(this);
   }
+
 
   placePiece (event) {
     var columnIndex = event.target.className;
@@ -49,12 +54,12 @@ class Board extends React.Component {
         //if player one
         if (!this.state.turn) {
           //set state of the row/col to instantiation of P1
-          board[currentRow][columnIndex] = '1';
+          board[currentRow][columnIndex] = PlayerOne();
           this.setState({'board': board});
         //else 
         } else {
           //set state of the row/col to instance of P2
-          board[currentRow][columnIndex] = '2';
+          board[currentRow][columnIndex] = PlayerTwo();
           this.setState({'board': board});
         }
         //invoke function to update turns on App
@@ -66,17 +71,19 @@ class Board extends React.Component {
         //check if winner
         var winner = this.checkForWins();
         if (winner) {
-          //change div to announce winner
           //set state to declare winner
           this.setState({'winner': winner})
         }
 
         //check for stalemate
         if (this.state.turnCount === 42) {
-
-          //change div to announce stalemate
           //set state of winenr to stalemate
+          this.setState({'winner': 'stalemate'});
         }
+
+        //set the message on app
+        this.setAppAnnouncements();
+
         //break out of loop
         break;
       }
@@ -84,6 +91,46 @@ class Board extends React.Component {
 
   }
 
+  resetBoard () {
+    //set variable to an empty board
+    var board = {
+      '5': ['', '', '', '', '', '', ''],
+      '4': ['', '', '', '', '', '', ''],
+      '3': ['', '', '', '', '', '', ''],
+      '2': ['', '', '', '', '', '', ''],
+      '1': ['', '', '', '', '', '', ''],
+      '0': ['', '', '', '', '', '', ''],
+    };
+
+    //set the state of board to a blank board
+    //set state of winner to null
+    //reset turns
+    this.setState({
+      'board': board,
+      'winner': null,
+      'turn': false,
+      'turnCount': 0
+    });
+
+    this.setAppAnnouncements();
+
+  }
+
+  setAppAnnouncements () {
+    if (this.state.winner === 'stalemate'){
+      this.props.setAnnouncement('This game is a stalemate!');
+
+    } else if (this.state.winner) {
+      this.props.setAnnouncement(`${this.state.winner} is the winner!`);
+
+    } else if (this.state.turn) {
+      this.props.setAnnouncement("Player 2's turn!");
+
+    } else {
+      this.props.setAnnouncement("Player 1's turn!");
+    }
+  }
+  
   checkForWins () {
     var rowWinner = this.winByRow();
     console.log('row', rowWinner);
@@ -114,30 +161,31 @@ class Board extends React.Component {
 
   winByRow () {
     var board = this.state.board;
-    //variable to store piece with streak
-    var streakPiece = null;
+    //variable to store player with streak
+    var streakPlayer;
     //counter set to zero
     var counter = 0;
+
     //iterate through each row in board
     for (var key in board) {
       //iterate through each row
-      for (var i = 0; i < board[key]; i++) {
-        var piece = board[key][i];
-        //if piece !== streakPiece && piece !== ''
-        if (piece !== streakPiece && piece) {
-          //set streakPiece equal to current piece
-          streakPiece = piece;
+      for (var i = 0; i < board[key].length; i++) {
+        var player = board[key][i];
+        //if player !== streakPlayer && player !== ''
+        if (player && streakPlayer !== player.key) {
+          //set streakPlayer equal to current player
+          streakPlayer = player.key;
           //set counter to 1
           counter = 1;
 
-        // else if piece is the same as streak piece & piece !== ''
-        } else if (piece === streakPiece && piece) {
+        // else if player is the same as streak player & player !== ''
+        } else if (player && streakPlayer === player.key) {
           //increase counter by 1
           counter++;
           //if counter === 4
           if (counter === 4) {
-            //return streakPiece
-            return streakPiece;
+            //return streakPlayer
+            return streakPlayer;
           }
         }
       }
@@ -152,29 +200,29 @@ class Board extends React.Component {
     var board = this.state.board;
     //iterate through column indices (0-6)
     for (var i = 0; i < colIndex.length; i++) {
-      //variable to store streak piece
-      var streakPiece;
+      //variable to store streak player
+      var streakPlayer;
       //counter set to zero
       var counter = 0;
       var curCol = colIndex[i]
       //iterate through rows at column index
       for (var j = 0; j < rows.length; j++) {
-        var piece = board[rows[j]][curCol];
-        //if piece !== string && piece !== streak piece
-        if (piece && piece !== streakPiece) {
-          // set streakpiece to current piece
-          streakPiece = piece;
+        var player = board[rows[j]][curCol];
+        //if player !== string && player !== streak player
+        if (player && player.key !== streakPlayer) {
+          // set streakPlayer to current player
+          streakPlayer = player.key;
           //reset counter to 1
           counter = 1;
 
-        //else if piece !== '' and streakpiece and piece are the same
-        } else if (piece && piece === streakPiece) {
+        //else if player !== '' and streakPlayer and player are the same
+        } else if (player && player.key === streakPlayer) {
           //increase counter 
           counter++;
           //if counter === 4
           if (counter === 4) {
-            //return streakpiece
-            return streakPiece;
+            //return streakPlayer
+            return streakPlayer;
           }
         }
       }
@@ -183,101 +231,138 @@ class Board extends React.Component {
     return null;
   }
 
+  winOnMajorDiag (colIndexAtRw0) {
+    //set streak player
+    var streakPlayer;
+    //set counter
+    var counter = 0;
+    //capture board
+    var board = this.state.board;
 
-  //for both diagonals we can skip checking the corners where it's not possible to get four in a row diagonally
-  // so only need to check total of 6 diagonal lines where a connect-four is possible (6 each diagonal, 12 total)
-  // can be acheived by splitting the rows and starting on the higher or lower column numbers depending on which
-  //row we start with
+    //iterate through row indices (0-5)
+    for (var i = 0; i < 6; i++) {
+      //if col index is greater than 6
+      if (colIndexAtRw0 > 6) {
+        //decrease col index
+        colIndexAtRw0--;
 
-  winByMinorDiag () {
+      //else set player variable to value at board/row/col
+      } else {
+        var player = board[i][colIndexAtRw0];
+        //if player is truthy and does not equal streakplayer
+        if (player && player.key !== streakPlayer) {
+          //set streakplayer equal to player
+          streakPlayer = player.key;
+          //reset counter to 1
+          counter = 1;
+          //decrease colindex
+          colIndexAtRw0--;
 
-    //iterate through rows
-      //if row index  is less than 3
-        //start from column 0 and increase column
-        //set column var  = 0
-        //streak piece var
-        //counter var
-        //row var = index
-        //while column var < 7
-          //if row/col index piece !== streakpiece  && !== ''
-            //set current piece to streak piece
-            //reset counter to 1
-            //increase row & col vars
-          // else if row/col index piece === streak piece && !== ''
-            //increase counter
-            //if counter === 4
-              //return streakpiece
-            //increment row & col vars
-
-
-      //else if row index is greater than 2
-        //start from column 6 and decrease column
-        //set col var to 6
-        //streak piece var
-        //counter var
-        //while col var >= 0
-          //if row/col piece  !== streakpiece && !== ''
-            //set current piece to streak piece
-            //set counter to 1
-            //increase row var
-            //decrease col var
-          //else if row/col piece === streakpiece && !== ''
-            //increment counter
-            //if counter  === 4
-              // return streakpiece
-            //decrement row & col vars
-
-    //return null
+        //else if player is truthy and equals streakplayer
+        } else if (player && player.key === streakPlayer) {
+          //increment counter
+          counter++
+          //if counter equals 4
+          if (counter === 4) {
+            //return streakplayer (winner)
+            return streakPlayer;
+          }
+          //decrement colindex
+          colIndexAtRw0--;
+        }
+      }
+    }
+    //if no winner is found, return null
+    return null;
   }
 
   winByMajorDiag () {
-    //iterate through rows
-      //if row index is less than three
-        //start from column 6 and decrease column
-        //set col var to 6
-        //set row var to row index
-        //set streak var
-        //set counter var
-          //while col >=0
-            //if row/col piece !== streakpiece && !== ''
-              //set streak piece to current piece
-              //reset counter to 1
-              //increase row var
-              //decrease col var
-            //else if row/col piece ===streakpiece && !== ''
-              //increment counter
-              //if counter === 4
-                //return streakpiece
-              //decrease col var
-              //increase row var
+    //create array of all row0 indicies it's possible to get a diagonal win on
+    //note: this is not all diagonals on the board, since some have less than four spots
+    var psbleColIndex = [3, 4, 5, 6, 7, 8];
 
-      //else if row index is greater than 2
-        //start from col 0 and increase column
-        //set col var to 0
-        //set row var to row index
-        //set streakpiece
-        //set counter to 1 
-          //while col < 7
-            //if row/col piece !== streakpiece && !== ''
-              //set streakpiece to piece
-              //reset counter to 1
-              //increase col var
-              //decrease row var
-            //else if row/piece === streakpiece && !== ''
-              //increment counter
-              //if counter equals 4
-                //return streakpiece
-              //increment col
-              //decrement row
-
-    //return null
+    //iterate through possible col indices
+    for (var i = 0; i < psbleColIndex.length; i++) {
+      //set variable equal to win on major diagonal with colindex passed in
+      var win = this.winOnMajorDiag(psbleColIndex[i]);
+      //if variable is truthy
+      if (win) {
+        //return the winner
+        return win;
+      }
+    }
+    //if no winners found, return null
+    return null;
   }
 
-  resetBoard () {
-    //set the state of board to a blank board
-    //set state of winner to null
-    //reset turns on app
+  winOnMinorDiag (colIndexAtRw0) {
+  //function to see if win on diagonal, given a col index at row 0
+    //set streakPlayer var
+    var streakPlayer;
+    //set counter variable
+    var counter;
+
+    //capture board
+    var board = this.state.board;
+    
+    //iterate through row indexes (0-5)
+    for (var i = 0; i < 6; i++) {
+      //if col index is negative
+      if(colIndexAtRw0 < 0) {
+        //increase col
+        colIndexAtRw0++
+
+      } else {
+        //set player variable to the value at board/row/col indexes
+        var player = board[i][colIndexAtRw0];
+        //if player is truthy and doesn't equal the streakPlayer
+        if (player && player.key !== streakPlayer) {
+          //set the streakplayer to player
+          streakPlayer = player.key;
+          //reset counter to 1
+          counter = 1;
+          //increase col index
+          colIndexAtRw0++;
+
+        //else if player is truthy and the same as streakPlayer
+        } else if (player && player.key === streakPlayer) {
+          //increment counter
+          counter++;
+          //check if counter is 4
+          if (counter === 4) {
+            //if it is, return the streak player (winner)
+            return streakPlayer;
+          }
+          //increse col index
+          colIndexAtRw0++
+        }
+      }
+    }
+    //if no wins, return null
+    return null;
+    
   }
+
+  winByMinorDiag () {
+    //create array of all row0 indicies it's possible to get a diagonal win on
+    //note: this is not all diagonals on the board, since some have less than four spots
+    var psbleColIndex = [-2, -1, 0, 1, 2, 3];
+
+    //iterate through possible column indices
+    for (var i = 0; i < psbleColIndex.length; i++) {
+      //call the win on major diagonal function to see if there's a win on that diagonal
+      var win = this.winOnMinorDiag(psbleColIndex[i]);
+      //if the value comes back truthy
+      if (win) {
+        //return the value
+        return win;
+      }
+    }
+    //otherwise, there's no win, so return null
+    return null;
+  }
+
+
 
   render () {
 
@@ -286,37 +371,39 @@ class Board extends React.Component {
         <table> 
           <tbody>        
             <tr id='row5'>
-              {this.state.board['r5'].map( (col, i) => {
+              {this.state.board['5'].map( (col, i) => {
                 return (<td className={i} onClick={this.placePiece}>{col}</td>)
               })}
             </tr>
             <tr id='row4'>
-              {this.state.board['r4'].map( (col, i) => {
+              {this.state.board['4'].map( (col, i) => {
                 return (<td className={i} onClick={this.placePiece}>{col}</td>)
               })}
             </tr>
             <tr id='row3'>
-              {this.state.board['r3'].map( (col, i) => {
+              {this.state.board['3'].map( (col, i) => {
                 return (<td className={i} onClick={this.placePiece}>{col}</td>)
               })}
             </tr>
             <tr id='row2'>
-              {this.state.board['r2'].map( (col, i) => {
+              {this.state.board['2'].map( (col, i) => {
                 return (<td className={i} onClick={this.placePiece}>{col}</td>)
               })}
             </tr>
             <tr id='row1'>
-              {this.state.board['r1'].map( (col, i) => {
+              {this.state.board['1'].map( (col, i) => {
                 return (<td className={i} onClick={this.placePiece}>{col}</td>)
               })}
             </tr>
             <tr id='row0'>
-              {this.state.board['r0'].map( (col, i) => {
+              {this.state.board['0'].map( (col, i) => {
                 return (<td className={i} onClick={this.placePiece}>{col}</td>)
               })}
             </tr>
           </tbody>
         </table>
+        <br />
+        <button id="newGame" onClick={this.resetBoard}>New Game!</button>
       </div>
     );
   }
