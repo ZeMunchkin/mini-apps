@@ -11,7 +11,7 @@ class Board extends React.Component {
       winner: null,
       turn: false,
       turnCount: 0,
-      rows: [0, 1, 2, 3, 4, 5],
+      //rows: [0, 1, 2, 3, 4, 5],
       board: {
         '5': ['', '', '', '', '', '', ''],
         '4': ['', '', '', '', '', '', ''],
@@ -47,8 +47,8 @@ class Board extends React.Component {
     var rows = this.state.rows;
     var board = this.state.board;
     //iterate through this.rows to find first row that's empty at col index
-    for (var i = 0; i < rows.length; i++) {
-      var currentRow = rows[i]
+    for (var i = 0; i < 6; i++) {
+      var currentRow = i;
       //if the row at that column is an empty string
       if (board[currentRow][columnIndex] === '') {
         //check whose turn it is
@@ -194,19 +194,17 @@ class Board extends React.Component {
 
   //by column
   winByCol () {
-    var colIndex = [0, 1, 2, 3, 4, 5, 6];
-    var rows = this.state.rows;
     var board = this.state.board;
     //iterate through column indices (0-6)
-    for (var i = 0; i < colIndex.length; i++) {
+    for (var i = 0; i < 7; i++) {
       //variable to store streak player
       var streakPlayer;
       //counter set to zero
       var counter = 0;
-      var curCol = colIndex[i]
+      var curCol = i;
       //iterate through rows at column index
-      for (var j = 0; j < rows.length; j++) {
-        var player = board[rows[j]][curCol];
+      for (var j = 0; j < 6; j++) {
+        var player = board[j][curCol];
         //if player !== string && player !== streak player
         if (player && player.key !== streakPlayer) {
           // set streakPlayer to current player
