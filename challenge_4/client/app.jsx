@@ -12,6 +12,7 @@ class App extends React.Component {
       frames: [['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', '']],
       totalScoresByFrame: [],
       availablePins: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      fillBall: false,
       gameOver: false,
 
     }
@@ -21,6 +22,9 @@ class App extends React.Component {
   }
 
   setScoreForRound (event) {
+    if (this.state.gameOver === true) {
+      return;
+    }
     //capture the value of the score from the event target
     const newScore = Number(document.getElementById('numPins').value);
 
@@ -28,10 +32,41 @@ class App extends React.Component {
     const frameScores = this.state.frames;
     //capture available scores array
     let availablePins = this.state.availablePins;
+    //capture fillBall
+    let fillBall = this.state.fillBall;
+    //capture gameStatus
+    let gameStatus = this.state.gameOver;
 
     //iterate through frames til you find an empty string
     for (let i = 0; i < frameScores.length; i++) {
       let frame = frameScores[i];
+
+      if (i === 9 && frame[0] === 'X') {
+        if (frame[1] === '') {
+          if (newScore === 10) {
+            frame[1] = 'X'
+          } else {
+            frame[1] = newScore;
+            availablePins = availablePins.filter( scoreValue => scoreValue + newScore <= 10);
+          }
+      
+        } else {
+          if (frame[1] === 'X') {
+            newScore === 10 ? frame[2] = 'X' : frame[2] = newScore;
+            gameStatus = true;
+
+          } else {
+            frame[1] + newScore === 10 ? frame[2] = '/' : frame[2] = newScore;
+            gameStatus = true;
+          }
+        }
+        break;
+      }
+
+      if (i === 9 && frame[1] === '/') {
+        newScore === 10 ? frame[2] = 'X' : frame[2] = newScore;
+        gameStatus = true;
+      }
 
       //if the first value of the tuple is an empty string
       if (frame[0] === '') {
@@ -40,8 +75,13 @@ class App extends React.Component {
           //set frame[0] to 'X'
           frame[0] = 'X';
           //delete second score of frame
-          frame.pop();
-          
+          if (i === 9) {
+            frame[2] = '';
+            fillBall = true;
+          } else{
+            frame.pop();
+          }
+
         //else if newScore is less than ten
         } else {
           //set score on 1st bowl to score
@@ -62,14 +102,20 @@ class App extends React.Component {
         if (frame[0] + newScore === 10){
           //if yes, add a third value to the tuple that says '/'
           frame[1] = '/';
+          if (i === 9) {
+            this.fillBall = true;
+            frame[2] = '';
+          }
         //otherwise
         } else {
           //set second bowl to new score
           frame[1] = newScore;
+          if (i === 9) {
+            gameStatus = true;
+          }
         }
         //break out of loop
         break;
-        
       }
     }
     //run the evaluate score function with new frames and capture return array
@@ -80,6 +126,8 @@ class App extends React.Component {
       availablePins: availablePins,
       frames: frameScores,
       totalScoresByFrame: scoresByFrame,
+      gameOver: gameStatus,
+      fillBall: fillBall,
     });
 
   }

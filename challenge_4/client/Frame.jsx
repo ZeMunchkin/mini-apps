@@ -4,8 +4,9 @@ const Frame = (props) => {
 
   return (
     <td>
-      {props.scores[0] === 'X' ? <div className="specials">{props.scores[0]}</div> : <span>{props.scores[0]} / </span>}
-      {props.scores[1] === '/' ? <span className="specials">{props.scores[1]}</span> : <span>{props.scores[1]}</span>}
+      {props.scores[0] ? <span>{props.scores[0]}</span> : <span> / </span>}
+      {props.scores[1] ? <span> / {props.scores[1]}</span> : <span />}
+      {props.scores[2]? <span> / {props.scores[2]}</span> : <span />}
     </td>
   );
 }
