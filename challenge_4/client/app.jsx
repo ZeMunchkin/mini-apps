@@ -14,7 +14,7 @@ class App extends React.Component {
       availablePins: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       fillBall: false,
       gameOver: false,
-
+      finalScore: null,
     }
 
     //function binding to this as necessary
@@ -29,6 +29,7 @@ class App extends React.Component {
       availablePins: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       fillBall: false,
       gameOver: false,
+      finalScore: null,
     });
   }
 
@@ -44,6 +45,7 @@ class App extends React.Component {
     let availablePins = this.state.availablePins;
     let fillBall = this.state.fillBall;
     let gameStatus = this.state.gameOver;
+    let finalScore = null;
 
     //iterate through frames til you find an empty string
     for (let i = 0; i < frameScores.length; i++) {
@@ -85,8 +87,6 @@ class App extends React.Component {
           if (i === 9) {
             frame[2] = '';
             fillBall = true;
-          } else{
-            frame.pop();
           }
 
         } else {
@@ -95,7 +95,7 @@ class App extends React.Component {
         }
         break;
 
-      } else if (frame[1] === '') {    
+      } else if (frame[1] === '' && frame[0] !== 'X') {    
         availablePins = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         if (frame[0] + newScore === 10){
           frame[1] = '/';
@@ -116,12 +116,17 @@ class App extends React.Component {
 
     let scoresByFrame = this.evaluateScoreByRound(frameScores);
 
+    if (gameStatus) {
+      finalScore = scoresByFrame[scoresByFrame.length - 1];
+    }
+
     this.setState({
       availablePins: availablePins,
       frames: frameScores,
       totalScoresByFrame: scoresByFrame,
       gameOver: gameStatus,
       fillBall: fillBall,
+      finalScore: finalScore,
     });
 
   }
@@ -289,6 +294,8 @@ class App extends React.Component {
           frames={this.state.frames}
           scores={this.state.totalScoresByFrame}
         />
+        <br />
+        { this.state.gameOver ? <div id="final">Final Score: {this.state.finalScore}</div> : <div />}
       </div>
     );
   }
