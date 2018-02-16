@@ -87,8 +87,6 @@ class App extends React.Component {
   evaluateScoreByRound (scoresArray) {
     //variable to store previous frame score total
     let prevFramesTotal = 0;
-    //working score variable
-    let workingFrameScore;
     //variable scores array
     const scoresTotals = [];
 
@@ -101,81 +99,144 @@ class App extends React.Component {
     for (let i = 0; i < scoresArray.length; i++) {
       //capture current frame
       let currFrame = scoresArray[i];
-      //capture nextFrame
-      let nextFrame = scoresArray[i + 1];
-      //capture frame after that
-      let sndNextFrame = scoresArray[i + 2];
 
       //if bowl 1 !== 'X' or if either bowl is falsy
-      if ( !currFrame[0] || (currFrame[0] !== 'X' && !currFrame[1]) ) {
+      if ( currFrame[0] === '' || (currFrame[0] !== 'X' && currFrame[1] === '') ) {
         //break out of loop
         break;
       }
 
-      //address spares
-      //if includes '/'
-      if (currFrame.includes('/')) {
-        //working score is 10
-        workingFrameScore = 10;
-        //go to next frame and check 1st value
-        //if truthy 
-          //and if not 'X'
-        if (nextFrame[0] !== 'X' && nextFrame[0]){
-          //add value to working score and update scores
-          updateScores(workingFrameScore + nextFrame[0]);
-
-        //else if X
-        } else if (nextFrame[0] === 'X') {
-          //add 10 to working score and update scores
-          updateScores(workingFrameScore + 10);
-        }
-        
-      //address strikes
-      //if includes 'X'
-      } else if (currFrame.includes('X')) {
-        //working score is 10
-        workingFrameScore = 10;
-
-        //go to next frame
-        //does it include 'X'?
-        if (nextFrame.includes('X')) {
-          //add 10 to working score
-          workingFrameScore += 10;
-
-          //go to 2ndNextFrame
-          //does it include 'X'?
-          if (sndNextFrame.includes('X')) {
-            //add 10 to working score and update scores
-            updateScores(workingFrameScore + 10);
-      
-          //is bowl 1 truthy?
-          } else if (sndNextFrame[0]) {
-            //add value to working score
-            updateScores(workingFrameScore + sndNextFrame[0])
-            
-          }
-          
-          //does it include '/'?
-        } else if (nextFrame.includes('/')) {
-          //add 10 to working and update scores
-          updateScores(workingFrameScore + 10);
-
-          
-        //are bowls 1 and 2 both truthy?
-        } else if (nextFrame[0] && nextFrame[1]) {
-          //add both values to working and update scores
-          updateScores(workingFrameScore + nextFrame[0] + nextFrame[1]);       
+      if (currFrame[0] === 'X') {
+        let frameScore = this.calculateStrikeScore(scoresArray, i);
+        if (frameScore) {
+          updateScores(frameScore);
         }
 
-      //address no specials
-      } else if (currFrame[0] && currFrame[1]) {
-        //updates scores w/ sum of bowls 1 and 2
+      } else if (currFrame[1] === '/') {
+        let frameScore = this.calculateSpareScore(scoresArray, i);
+        if (frameScore) {
+          updateScores(frameScore);
+        }
+
+      } else if ((typeof currFrame[0] === 'number') && (typeof currFrame[1] === 'number')) {
         updateScores(currFrame[0] + currFrame[1]);
       }
     }
     //return scores array
     return scoresTotals
   }
+
+
+  calculateSpareScore (scoresArray, frameIndex) {
+    const currFrame = scoresArray[frameIndex];
+    let workingFrameScore = 10;
+
+    //address if it's the last frame
+    if (frameIndex === 9) {
+      if (currFrame[2] === 'X') {
+        workingFrameScore += 10;
+        return workingFrameScore
+      }
+      if (typeof currFrame[2] === 'number') {
+        workingFrameScore += currFrame[2];
+        return workingFrameScore;
+      }
+      return null;
+    }
+
+    //address all others
+    const nextFrame = scoresArray[frameIndex + 1];
+
+    if (nextFrame[0] === 'X') {
+      workingFrameScore += 10;
+      return workingFrameScore;
+    }
+    if (typeof nextFrame[0] === 'number') {
+      workingFrameScore += nextFrame[0];
+      return workingFrameScore;
+    }
+    return null;
+  }
+
+  calculateStrikeScore (scoresArray, frameIndex) {
+    const currFrame = scoresArray[frameIndex];
+    let workingFrameScore = 10;
+
+    //address if it's the last (10th) frame
+    if ( frameIndex === 9 ) {
+      if (currFrame[1] === 'X') {
+        workingFrameScore += 10
+      }
+      if (currFrame[2] === 'X') {
+        workingFrameScore += 10;
+        return workingFrameScore;
+      }
+      if (currFrame[2] === '/') {
+        workingFrameScore += 10;
+        return workingFrameScore;
+      }
+      if (typeof currFrame[1] === 'number') {
+        workingFrameScore += currFrame[1];
+      }
+      if (typeof currFrame[2] === 'number') {
+        workingFrameScore += currFrame[2];
+        return workingFrameScore;
+      }
+      return null;
+    }
+
+    const nextFrame = scoresArray[frameIndex + 1]
+
+    //address if ninth frame and tenth has a strike
+    if (frameIndex === 8 && nextFrame[0] === 'X') {
+      workingFrameScore += 10;
+
+      if (nextFrame[1] === 'X') {
+        workingFrameScore += 10;
+        return workingFrameScore;
+      }
+
+      if (typeof nextFrame[1] === 'number') {
+        workingFrameScore += nextFrame[1];
+        return workingFrameScore;
+      }
+    }
+
+    //address all other frames, spares first
+    if (nextFrame[1] === '/') {
+      workingFrameScore += 10;
+      return workingFrameScore;
+    }
+
+    if (frameIndex + 1 === 9) {
+      return null;
+    }
+
+    //if next frame is a strike
+    if (nextFrame[0] === 'X') {
+      //add 10 to working score
+      workingFrameScore += 10;
+
+      const sndNextFrame = scoresArray[frameIndex + 2];
+
+      if (sndNextFrame[0] === 'X') {
+        workingFrameScore += 10;
+        return workingFrameScore;
+      }
+
+      if (typeof sndNextFrame[0] === 'number') {
+        workingFrameScore += sndNextFrame[0];
+        return workingFrameScore;
+      } 
+    }
+
+    if (typeof nextFrame[0] === 'number' && typeof nextFrame[1] === 'number') {
+      workingFrameScore += nextFrame[0] + nextFrame[1];
+      return workingFrameScore;
+    }
+    return null;
+  }
+
 
 
   render () {
