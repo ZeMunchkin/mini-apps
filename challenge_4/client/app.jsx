@@ -19,28 +19,37 @@ class App extends React.Component {
 
     //function binding to this as necessary
     this.setScoreForRound = this.setScoreForRound.bind(this);
+    this.reset = this.reset.bind(this);
+  }
+
+  reset () {
+    this.setState ({
+      frames: [['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', '']],
+      totalScoresByFrame: [],
+      availablePins: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      fillBall: false,
+      gameOver: false,
+    });
   }
 
   setScoreForRound (event) {
     if (this.state.gameOver === true) {
       return;
     }
-    //capture the value of the score from the event target
+
     const newScore = Number(document.getElementById('numPins').value);
 
-    //reference our frames array in a variable
+
     const frameScores = this.state.frames;
-    //capture available scores array
     let availablePins = this.state.availablePins;
-    //capture fillBall
     let fillBall = this.state.fillBall;
-    //capture gameStatus
     let gameStatus = this.state.gameOver;
 
     //iterate through frames til you find an empty string
     for (let i = 0; i < frameScores.length; i++) {
       let frame = frameScores[i];
 
+      //address the nuances of the last frame
       if (i === 9 && frame[0] === 'X') {
         if (frame[1] === '') {
           if (newScore === 10) {
@@ -68,13 +77,11 @@ class App extends React.Component {
         gameStatus = true;
       }
 
-      //if the first value of the tuple is an empty string
+      //otherwise find next available open spot
       if (frame[0] === '') {
-        //if newScore is ten (a strike)
         if (newScore === 10) {
-          //set frame[0] to 'X'
           frame[0] = 'X';
-          //delete second score of frame
+
           if (i === 9) {
             frame[2] = '';
             fillBall = true;
@@ -82,46 +89,33 @@ class App extends React.Component {
             frame.pop();
           }
 
-        //else if newScore is less than ten
         } else {
-          //set score on 1st bowl to score
           frame[0] = newScore;
-          //create new available scores array
           availablePins = availablePins.filter( scoreValue => scoreValue + newScore <= 10);
-          //availablePins = newAvailablePins;
         }
-        //break out of loop
         break;
 
-      //if the second value of the tuple is an empty string
       } else if (frame[1] === '') {    
-        //reset available pins array variable to include 0-10
         availablePins = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-        //capture the value of the tuple at 1
-        //check if the tuple at 1 plus new score  = 10 (a spare)
         if (frame[0] + newScore === 10){
-          //if yes, add a third value to the tuple that says '/'
           frame[1] = '/';
           if (i === 9) {
             this.fillBall = true;
             frame[2] = '';
           }
-        //otherwise
+
         } else {
-          //set second bowl to new score
           frame[1] = newScore;
           if (i === 9) {
             gameStatus = true;
           }
         }
-        //break out of loop
         break;
       }
     }
-    //run the evaluate score function with new frames and capture return array
+
     let scoresByFrame = this.evaluateScoreByRound(frameScores);
-    console.log(scoresByFrame);
-    //set the state of the frames, totalScorebyFrame, and availablePins
+
     this.setState({
       availablePins: availablePins,
       frames: frameScores,
@@ -133,9 +127,7 @@ class App extends React.Component {
   }
 
   evaluateScoreByRound (scoresArray) {
-    //variable to store previous frame score total
     let prevFramesTotal = 0;
-    //variable scores array
     const scoresTotals = [];
 
     const updateScores = (roundScore) => {
@@ -143,14 +135,10 @@ class App extends React.Component {
       scoresTotals.push(prevFramesTotal);
     }
 
-    //iterate through scoresArray
     for (let i = 0; i < scoresArray.length; i++) {
-      //capture current frame
       let currFrame = scoresArray[i];
 
-      //if bowl 1 !== 'X' or if either bowl is falsy
       if ( currFrame[0] === '' || (currFrame[0] !== 'X' && currFrame[1] === '') ) {
-        //break out of loop
         break;
       }
 
@@ -170,7 +158,7 @@ class App extends React.Component {
         updateScores(currFrame[0] + currFrame[1]);
       }
     }
-    //return scores array
+
     return scoresTotals
   }
 
@@ -262,7 +250,6 @@ class App extends React.Component {
 
     //if next frame is a strike
     if (nextFrame[0] === 'X') {
-      //add 10 to working score
       workingFrameScore += 10;
 
       const sndNextFrame = scoresArray[frameIndex + 2];
@@ -291,10 +278,12 @@ class App extends React.Component {
     return (
       <div>
         <h1>Let's Bowl!</h1>
-        <BowlAction 
+        <div>
+          {this.state.gameOver ? (<button onClick={this.reset}>New Game!</button>) : (<BowlAction 
           setScoreForRound={this.setScoreForRound}
           availablePins={this.state.availablePins}
-        />
+        />)}
+        </div>
         <br />
         <Frames 
           frames={this.state.frames}
@@ -305,6 +294,6 @@ class App extends React.Component {
   }
 }
 
-render(<App/>, document.getElementById('app'));
+render(<App />, document.getElementById('app'));
 
 
